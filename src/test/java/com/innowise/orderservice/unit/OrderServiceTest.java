@@ -7,7 +7,7 @@ import com.innowise.orderservice.dto.UserDto;
 import com.innowise.orderservice.entity.Order;
 import com.innowise.orderservice.exception.OrderException;
 import com.innowise.orderservice.mapper.OrderMapper;
-import com.innowise.orderservice.repositoty.OrderRepository;
+import com.innowise.orderservice.repository.OrderRepository;
 import com.innowise.orderservice.service.impl.OrderServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

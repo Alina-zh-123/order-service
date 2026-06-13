@@ -8,7 +8,7 @@ import com.innowise.orderservice.entity.Order;
 import com.innowise.orderservice.entity.OrderItem;
 import com.innowise.orderservice.exception.OrderException;
 import com.innowise.orderservice.mapper.OrderMapper;
-import com.innowise.orderservice.repositoty.OrderRepository;
+import com.innowise.orderservice.repository.OrderRepository;
 import com.innowise.orderservice.service.OrderService;
 import com.innowise.orderservice.specification.OrderSpecification;
 import lombok.RequiredArgsConstructor;

@@ -14,7 +14,7 @@ spring:
         format_sql: true
 
   liquibase:
-    change-log: classpath:db/changelog/master.yaml
+    change-log: classpath:db/changelog/master.xml
     enabled: ${LIQUIBASE_ENABLED:true}
 
   user:

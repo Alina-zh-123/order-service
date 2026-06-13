@@ -5,7 +5,7 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.innowise.orderservice.dto.OrderDto;
 import com.innowise.orderservice.dto.UserDto;
 import com.innowise.orderservice.entity.Order;
-import com.innowise.orderservice.repositoty.OrderRepository;
+import com.innowise.orderservice.repository.OrderRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
