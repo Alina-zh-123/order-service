@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="0000" author="alina">
+        <createTable tableName="orders">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="status" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="total_price" type="decimal">
+                <constraints nullable="false" />
+            </column>
+            <column name="deleted" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false" />
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+            <column name="updated_at" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <createIndex tableName="orders" indexName="orders_user_id_idx">
+            <column name="user_id" />
+        </createIndex>
+        <createIndex tableName="orders" indexName="orders_status_idx">
+            <column name="status" />
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>
