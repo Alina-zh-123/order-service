@@ -2,7 +2,7 @@ name: CI Pipeline
 
 on:
   push:
-    branches: ["feature/ORD-1"]
+    branches: ["feature/ORD-0"]
   pull_request:
     branches: ["main"]
 
