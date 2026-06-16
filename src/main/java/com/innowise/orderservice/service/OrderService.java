@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface OrderService {
-    OrderResponseDto createOrder(OrderDto orderDto, String email);
+    OrderResponseDto createOrder(OrderDto orderDto);
     OrderResponseDto getOrderById(Long orderId);
-    Page<OrderResponseDto> getAllOrdersWithFilter(LocalDateTime start, LocalDateTime end, String status, Pageable pageable);
+    Page<OrderResponseDto> getAllOrdersWithFilter(LocalDateTime start, LocalDateTime end, List<String> statuses, Pageable pageable);
     List<OrderResponseDto> getOrdersByUserId(Long userId);
     OrderResponseDto updateOrder(Long orderId, OrderDto orderDto);
     void deleteOrderById(Long orderId);

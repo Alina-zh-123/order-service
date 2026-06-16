@@ -35,5 +35,8 @@
         <createIndex tableName="orders" indexName="orders_status_idx">
             <column name="status" />
         </createIndex>
+        <createIndex tableName="orders" indexName="orders_created_at_idx">
+            <column name="created_at" />
+        </createIndex>
     </changeSet>
 </databaseChangeLog>

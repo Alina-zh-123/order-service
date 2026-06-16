@@ -22,6 +22,8 @@ services:
       SPRING_PROFILES_ACTIVE: docker
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
+      DB_URL: ${DB_URL}
+      USER_SERVICE_URL: ${USER_SERVICE_URL}
     ports:
       - "8080:8080"
 

@@ -4,6 +4,7 @@ import com.innowise.orderservice.entity.Order;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class OrderSpecification {
     public static Specification<Order> createdBetween(LocalDateTime start, LocalDateTime end) {
@@ -19,10 +20,10 @@ public class OrderSpecification {
         };
     }
 
-    public static Specification<Order> hasStatus(String status) {
+    public static Specification<Order> hasStatuses(List<String> statuses) {
         return (root, query, criteriaBuilder) -> {
-            if (status == null || status.isBlank()) return null;
-            return criteriaBuilder.equal(root.get("status"), status);
+            if (statuses == null || statuses.isEmpty()) return null;
+            return root.get("status").in(statuses);
         };
     }
 }

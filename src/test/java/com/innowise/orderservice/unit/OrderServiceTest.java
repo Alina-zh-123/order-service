@@ -2,9 +2,11 @@ package com.innowise.orderservice.unit;
 
 import com.innowise.orderservice.client.UserClient;
 import com.innowise.orderservice.dto.OrderDto;
+import com.innowise.orderservice.dto.OrderItemDto;
 import com.innowise.orderservice.dto.OrderResponseDto;
 import com.innowise.orderservice.dto.UserDto;
 import com.innowise.orderservice.entity.Order;
+import com.innowise.orderservice.entity.OrderItem;
 import com.innowise.orderservice.exception.OrderException;
 import com.innowise.orderservice.mapper.OrderMapper;
 import com.innowise.orderservice.repository.OrderRepository;
@@ -28,8 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
@@ -47,13 +48,16 @@ public class OrderServiceTest {
 
     private Order order1;
     private OrderDto orderDto1;
+    private OrderDto orderDto2;
     private OrderResponseDto orderResponseDto1;
     private UserDto userDto1;
     private String email1;
+    private String email2;
 
     @BeforeEach
     void setUp() {
         email1 = "qwerty@gmail.com";
+        email2 = "mymail@gmail.com";
 
         userDto1 = new UserDto();
         userDto1.setId(1L);
@@ -63,6 +67,13 @@ public class OrderServiceTest {
         orderDto1.setStatus("PENDING");
         orderDto1.setTotalPrice(BigDecimal.valueOf(100.0));
         orderDto1.setOrderItems(new ArrayList<>());
+        orderDto1.setEmail(email1);
+
+        orderDto2 = new OrderDto();
+        orderDto2.setStatus("DELIVERED");
+        orderDto2.setTotalPrice(BigDecimal.valueOf(999.99));
+        orderDto2.setOrderItems(new ArrayList<>());
+        orderDto2.setEmail(email2);
 
         order1 = new Order();
         order1.setId(1L);
@@ -81,7 +92,7 @@ public class OrderServiceTest {
         when(orderRepository.save(order1)).thenReturn(order1);
         when(orderMapper.orderToDto(order1)).thenReturn(orderDto1);
 
-        OrderResponseDto result = orderService.createOrder(orderDto1, email1);
+        OrderResponseDto result = orderService.createOrder(orderDto1);
         assertEquals(orderResponseDto1, result);
 
         verify(userClient).getUserByEmail(email1);
@@ -120,7 +131,10 @@ public class OrderServiceTest {
     void getAllOrdersWithFilter_ShouldReturnPageOrderResponseDto() {
         LocalDateTime start = LocalDateTime.now().minusDays(1);
         LocalDateTime end = LocalDateTime.now();
-        String status = "PENDING";
+        List<String> statuses = new ArrayList<>();
+        statuses.add("PENDING");
+        statuses.add("DELIVERED");
+
         Pageable pageable = PageRequest.of(0, 10);
 
         List<Order> orders = List.of(order1);
@@ -133,14 +147,14 @@ public class OrderServiceTest {
         when(userClient.getUserById(1L)).thenReturn(userDto1);
         when(orderMapper.orderToDto(order1)).thenReturn(orderDto1);
 
-        Page<OrderResponseDto> result = orderService.getAllOrdersWithFilter(start, end, status, pageable);
+        Page<OrderResponseDto> result = orderService.getAllOrdersWithFilter(start, end, statuses, pageable);
 
         assertEquals(1, result.getContent().size());
         assertEquals(orderResponseDto1, result.getContent().get(0));
-        verify(orderRepository.findAll(
+        verify(orderRepository).findAll(
                 ArgumentMatchers.<Specification<Order>>any(),
                 eq(pageable)
-        ));
+        );
         verify(userClient).getUserById(1L);
     }
 
@@ -157,6 +171,27 @@ public class OrderServiceTest {
         assertEquals(orderResponseDto1, result.get(0));
         verify(orderRepository).findByUserId(userId);
         verify(userClient).getUserById(userId);
+    }
+
+    @Test
+    void updateOrder_shouldUpdateOrder() {
+        Long orderId = 1L;
+
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(order1));
+        when(orderMapper.orderToDto(order1)).thenReturn(orderDto2);
+        when(orderRepository.save(order1)).thenReturn(order1);
+        when(userClient.getUserById(order1.getUserId())).thenReturn(userDto1);
+
+        OrderResponseDto orderResponseDto = orderService.updateOrder(orderId, orderDto2);
+        assertEquals(orderResponseDto.getOrder().getStatus(), orderDto2.getStatus());
+        assertEquals(orderResponseDto.getOrder().getTotalPrice(), orderDto2.getTotalPrice());
+        assertEquals(orderResponseDto.getOrder().getOrderItems().size(), orderDto2.getOrderItems().size());
+        assertTrue(orderResponseDto.getOrder().getOrderItems().isEmpty());
+
+        verify(orderRepository).findById(orderId);
+        verify(orderMapper).orderToDto(order1);
+        verify(orderRepository).save(order1);
+        verify(userClient).getUserById(order1.getUserId());
     }
 
     @Test

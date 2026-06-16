@@ -1,7 +1,9 @@
 package com.innowise.orderservice.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
 import lombok.Setter;
 import lombok.Getter;
@@ -30,8 +32,11 @@ public class OrderDto implements Serializable {
     @Positive(message = "Price must be positive")
     private BigDecimal totalPrice;
 
-    @NotNull(message = "Deleted status must not be null")
-    private boolean deleted;
-
+    @NotEmpty(message = "Order items cannot be empty")
+    @Valid
     private List<OrderItemDto> orderItems;
+
+    @NotBlank(message = "Email cannot be blank")
+    @Email(message = "Invalid email format")
+    private String email;
 }

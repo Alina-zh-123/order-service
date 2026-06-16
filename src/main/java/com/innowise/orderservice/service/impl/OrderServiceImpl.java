@@ -29,7 +29,8 @@ public class OrderServiceImpl implements OrderService {
     private final UserClient userClient;
 
     @Override
-    public OrderResponseDto createOrder(OrderDto orderDto, String email) {
+    public OrderResponseDto createOrder(OrderDto orderDto) {
+        String email =  orderDto.getEmail();
         UserDto userDto = userClient.getUserByEmail(email);
 
         Order order = orderMapper.dtoToOrder(orderDto);
@@ -53,10 +54,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<OrderResponseDto> getAllOrdersWithFilter(LocalDateTime start, LocalDateTime end, String status, Pageable pageable) {
+    public Page<OrderResponseDto> getAllOrdersWithFilter(LocalDateTime start, LocalDateTime end, List<String> statuses, Pageable pageable) {
         Specification<Order> spec = Specification
                 .where(OrderSpecification.createdBetween(start, end))
-                .and(OrderSpecification.hasStatus(status));
+                .and(OrderSpecification.hasStatuses(statuses));
 
         Page<Order> res = orderRepository.findAll(spec, pageable);
 

@@ -59,7 +59,7 @@ public class OrderIntegrationTest {
         registry.add("spring.datasource.username", postgresSQLContainer::getUsername);
         registry.add("spring.datasource.password", postgresSQLContainer::getPassword);
 
-        registry.add("${user.service.url}", () -> "http://localhost:" + wireMockServer.port());
+        registry.add("USER_SERVICE_URL", () -> "http://localhost:" + wireMockServer.port());
     }
 
     @BeforeAll
@@ -126,8 +126,8 @@ public class OrderIntegrationTest {
 
         mockMvc.perform(get("/orders/{id}", savedOrder.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.orderDto.totalPrice", is(100.0)))
-                .andExpect(jsonPath("$.userDto.id", is(1)));
+                .andExpect(jsonPath("$.order.totalPrice", is(100.0)))
+                .andExpect(jsonPath("$.user.id", is(1)));
     }
 
     @Test

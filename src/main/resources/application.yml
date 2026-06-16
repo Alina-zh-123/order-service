@@ -8,10 +8,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
 
   liquibase:
     change-log: classpath:db/changelog/master.xml
@@ -19,7 +19,7 @@ spring:
 
   user:
     service:
-      url: http://localhost:8081
+      url: ${USER_SERVICE_URL:http://localhost:8081}
 
   cloud:
     openfeign:

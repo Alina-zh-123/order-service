@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(OrderException.class)
-    public ResponseEntity<ErrorDetails> handleUserException(OrderException ex) {
+    public ResponseEntity<ErrorDetails> handleOrderException(OrderException ex) {
         ErrorDetails errorDetails = new ErrorDetails(
                 HttpStatus.NOT_FOUND.value(),
                 ex.getMessage(),
-                "User handle error!"
+                "Order handle error!"
         );
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
@@ -44,5 +44,15 @@ public class GlobalExceptionHandler {
                 "Constraint violation!"
         );
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ErrorDetails> handleIllegalStateException(IllegalStateException ex) {
+        ErrorDetails errorDetails = new ErrorDetails(
+                HttpStatus.SERVICE_UNAVAILABLE.value(),
+                ex.getMessage(),
+                "Service is unavailable!"
+        );
+        return new ResponseEntity<>(errorDetails, HttpStatus.SERVICE_UNAVAILABLE);
     }
 }
