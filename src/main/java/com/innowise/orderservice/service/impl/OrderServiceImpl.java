@@ -6,6 +6,7 @@ import com.innowise.orderservice.dto.OrderResponseDto;
 import com.innowise.orderservice.dto.UserDto;
 import com.innowise.orderservice.entity.Order;
 import com.innowise.orderservice.entity.OrderItem;
+import com.innowise.orderservice.entity.OrderStatus;
 import com.innowise.orderservice.exception.OrderException;
 import com.innowise.orderservice.mapper.OrderMapper;
 import com.innowise.orderservice.repository.OrderRepository;
@@ -27,6 +28,20 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final UserClient userClient;
+
+    @Override
+    @Transactional
+    public void updateOrderStatusFromPayment(Long orderId, String paymentStatus) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderException("Order is not found!"));
+
+        if ("SUCCESS".equals(paymentStatus)) {
+            order.setStatus(OrderStatus.PAID.name());
+        } else if ("FAILED".equals(paymentStatus)) {
+            order.setStatus(OrderStatus.CANCELLED.name());
+        }
+        orderRepository.save(order);
+    }
 
     @Override
     public OrderResponseDto createOrder(OrderDto orderDto) {
