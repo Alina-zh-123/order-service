@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface OrderService {
+    void updateOrderStatusFromPayment(Long orderId, String paymentStatus);
     OrderResponseDto createOrder(OrderDto orderDto);
     OrderResponseDto getOrderById(Long orderId);
     Page<OrderResponseDto> getAllOrdersWithFilter(LocalDateTime start, LocalDateTime end, List<String> statuses, Pageable pageable);
